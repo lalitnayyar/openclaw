@@ -14,7 +14,9 @@ cd "${PROJECT_ROOT}"
 
 echo "[1/5] Installing system dependencies (Python, Node, Nginx, Git)..."
 sudo apt update
-sudo apt install -y python3 python3-venv python3-pip nodejs npm nginx git
+# npm is omitted here because Node.js from NodeSource already includes npm, and the
+# Ubuntu npm package conflicts with that Node.js distribution.
+sudo apt install -y python3 python3-venv python3-pip nodejs nginx git
 
 echo "[2/5] Setting up Python virtualenv and backend dependencies..."
 python3 -m venv .venv

@@ -33,7 +33,7 @@ chmod +x scripts/install_on_azure_vm.sh
 
 The script will:
 
-- Install system dependencies: `python3`, `python3-venv`, `python3-pip`, `nodejs`, `npm`, `nginx`, `git`.
+- Install system dependencies: `python3`, `python3-venv`, `python3-pip`, `nodejs`, `nginx`, `git`.
 - Create a Python virtualenv at `.venv` and install `fastapi` and `uvicorn[standard]`.
 - Build the dashboard with `VITE_API_BASE_URL=/api` so the frontend calls the backend via Nginx.
 - Create and enable a `systemd` service `openclaw-backend` listening on **port 9000**.
