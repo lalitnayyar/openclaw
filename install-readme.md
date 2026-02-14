@@ -68,29 +68,47 @@ sudo systemctl restart openclaw-backend
 sudo systemctl restart nginx
 ```
 
-## Updating the deployment
+## Updating the deployment (when code changes)
 
-When you update the code and want to redeploy:
+Whenever you push new code to GitHub and want your Azure VM to run the latest version, you have two options.
+
+### Option A – Simple update (recommended)
+
+This is usually enough when you have changed only Python/TypeScript source code or styles.
 
 ```bash
+ssh azureuser@<vm-ip>
+
 cd ~/openclaw
-source .venv/bin/activate
+git pull
 
-# If backend deps changed:
-pip install -r <your-backend-reqs-if-added>.txt
-
-# Rebuild dashboard
+# Rebuild dashboard (frontend)
 cd dashboard
 export VITE_API_BASE_URL=/api
 npm install
 npm run build
 
-# Restart services
+# Restart services to pick up changes
+cd ..
 sudo systemctl restart openclaw-backend
 sudo systemctl restart nginx
 ```
 
-You can also re-run `./scripts/install_on_azure_vm.sh` after pulling changes; it is written to be idempotent for common updates.
+### Option B – Full reinstall (safe re-run of installer)
+
+If you have changed install scripts or system dependencies and want to be sure everything is refreshed, you can re-run the installer script after pulling changes:
+
+```bash
+ssh azureuser@<vm-ip>
+
+cd ~/openclaw
+git pull
+
+chmod +x scripts/install_on_azure_vm.sh
+./scripts/install_on_azure_vm.sh
+```
+
+The installer is written to be idempotent for common updates: it will reinstall any missing packages, rebuild the dashboard, ensure the `openclaw-backend` service is configured, and reload Nginx.
 
 ## Integration notes
 
