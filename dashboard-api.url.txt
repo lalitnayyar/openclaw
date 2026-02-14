@@ -1,0 +1,2 @@
+Backend API base URL (for local dev):
+http://localhost:8000
