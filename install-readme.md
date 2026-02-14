@@ -110,6 +110,16 @@ chmod +x scripts/install_on_azure_vm.sh
 
 The installer is written to be idempotent for common updates: it will reinstall any missing packages, rebuild the dashboard, ensure the `openclaw-backend` service is configured, and reload Nginx.
 
+## Azure networking / ports to open
+
+To access the dashboard and (optionally) the backend from your local machine, ensure your Azure **Network Security Group (NSG)** or firewall allows inbound traffic on:
+
+- **TCP 22** – SSH access (required to run install/update commands on the VM).
+- **TCP 80** – HTTP access to the dashboard at `http://<vm-ip>/` (Nginx).
+- **TCP 9000** *(optional)* – direct access to the FastAPI backend at `http://<vm-ip>:9000/` for debugging. In production you can keep this closed to external traffic and only use `/api` via Nginx on port 80.
+
+On Azure, check the **Inbound port rules** for the VM or its NSG and add rules for these ports as needed. For a locked-down setup, only expose ports **22** and **80**, and rely on `/api` via Nginx instead of opening **9000** publicly.
+
 ## Integration notes
 
 - The dashboard uses a configurable `VITE_API_BASE_URL` for API calls. In local dev it defaults to `http://localhost:8000`.
